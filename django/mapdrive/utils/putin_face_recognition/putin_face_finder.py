@@ -103,7 +103,9 @@ def process_frame(file, image, seconds):
         if dists[0] < 0.7:
             image_name = file.file.name + str(seconds) + ".png"
             plt.imsave(image_name, image)
-            artifact = ProcessResultArtifact.objects.create(url=IMAGE_URL + image_name, seconds=seconds, file=file)
+            artifact = ProcessResultArtifact(url=IMAGE_URL + image_name, seconds=seconds, file=file)
+            artifact.save(force_insert=True)
+            print(ProcessResultArtifact.objects.count())
 
         print "NEAREST NEIGHBORS IN ANNOY INDEX:"
         for n_id, dist in zip(neighb_ids, dists):
