@@ -82,7 +82,7 @@ def send(request):
     email = request.POST["email"]
     files = list(map(int, request.POST["file-ids"].split(",")))
     track_uploaded(request, email, files)
-    return HttpResponseRedirect("/process_result/" + )
+    return HttpResponseRedirect("/process_result/")# + )
 
 
 def index(request):
