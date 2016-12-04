@@ -13,6 +13,8 @@ import json
 import os
 from django.http import JsonResponse
 
+from .utils.putin_face_recognition.putin_face_finder import find_putin
+
 
 def track_uploaded(request, email, file_ids):
     try:
@@ -27,11 +29,12 @@ def track_uploaded(request, email, file_ids):
         profile.user = user
     profile.save()
     login(request, user)
-    for id in file_ids:
-        try:
-            print("HANDLE ME")
-        except File.DoesNotExist:
-            pass
+    find_putin(File.objects.get(id=file_ids[0]))
+    #for id in file_ids:
+    #    try:
+    #        find_putin()
+    #    except File.DoesNotExist:
+    #        pass
 
 
 @require_POST
