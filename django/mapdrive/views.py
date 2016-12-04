@@ -12,9 +12,14 @@ from time import sleep
 import json
 import os
 from django.http import JsonResponse
+from background_task import background
 
 from .utils.putin_face_recognition.putin_face_finder import find_putin
 
+
+@background(schedule=5)
+def process_video(id):
+    find_putin(File.objects.get(id=id))
 
 def track_uploaded(request, email, file_ids):
     try:
@@ -29,12 +34,8 @@ def track_uploaded(request, email, file_ids):
         profile.user = user
     profile.save()
     login(request, user)
-    find_putin(File.objects.get(id=file_ids[0]))
-    #for id in file_ids:
-    #    try:
-    #        find_putin()
-    #    except File.DoesNotExist:
-    #        pass
+
+    process_video(file_ids[0])
 
 
 @require_POST
