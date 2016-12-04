@@ -10,12 +10,15 @@
   {% else %}
   Processing is in progress.
 {% endif %}
-
+<br>
 {% if len_artifacts == 0 %}
 There are no artifacts.
 {% else %}
-
-A lot of artifacts.
+  A lot of artifacts:<br>
+  {% for atr in artifacts %}
+    Artifact. Seconds:  {{art.seconds}}<br>
+    <img src={{art.url}} width="250" height="250"><br>
+  {% endfor %}
 {% endif %}
 {% endblock %}
 
