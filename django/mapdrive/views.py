@@ -21,7 +21,7 @@ from .utils.putin_face_recognition.putin_face_finder import find_putin
 def process_video(id):
     find_putin(File.objects.get(id=id))
 
-def track_uploaded(request, email, file_ids):
+def track_uploaded(request, email, file):
     try:
         user = User.objects.get(username=email)
         profile = user.profile
@@ -35,7 +35,7 @@ def track_uploaded(request, email, file_ids):
     profile.save()
     login(request, user)
 
-    process_video(file_ids[0])
+    process_video(file)
 
 def process_result(request, id):
   file = File.objects.get(pk=id)
@@ -81,8 +81,9 @@ def upload_delete(request, pk):
 def send(request):
     email = request.POST["email"]
     files = list(map(int, request.POST["file-ids"].split(",")))
-    track_uploaded(request, email, files)
-    return HttpResponseRedirect("/process_result/")# + )
+    file = files[0]
+    track_uploaded(request, email, file)
+    return HttpResponseRedirect("/process_result/" +  str(file) + "/")
 
 
 def index(request):

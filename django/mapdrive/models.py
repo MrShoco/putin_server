@@ -13,5 +13,5 @@ class Profile(models.Model):
 
 class ProcessResultArtifact(models.Model):
     file = models.ForeignKey(File)
-    url = models.CharField(max_length=255)
-    seconds = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, default='')
+    seconds = models.CharField(max_length=255, default='')

@@ -4,6 +4,17 @@
 {% block title %}Process Result{% endblock %}
 
 {% block body %}
-Hello, {{ id }}
+
+{% if file.processed %}
+  Processing completed. 
+  {% else %}
+  Processing is in progress.
+{% endif %}
+
+{% if len(artifacts) == 0 %}
+There are no artifacts.
+{% else %}
+A lot of artifacts.
+{% end %}
 {% endblock %}
 
