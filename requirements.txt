@@ -1,6 +1,8 @@
 -e git://github.com/CalPolyResDev/django-jfu.git#egg=django-jfu
 Django==1.10.3
 Pillow==3.4.2
-lxml
 tqdm
+pandas
+numpy
+matplotlib
 django-background-tasks
