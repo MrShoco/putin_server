@@ -1,0 +1,331 @@
+﻿body {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.left-side-panel {
+    width: 35%;
+    position: fixed;
+    height: 110%;
+    top: -5%;
+    padding-left: 2%;
+    padding-right: 2%;
+    bottom: -5%;
+    overflow-x: hidden;
+    z-index: 1;
+    color: white;
+    display: none;
+    padding-top: 10%;
+    background-color: #222222;
+    box-shadow: 20px 0px 60px #222222;
+}
+
+.ol-zoom {
+    display: none;
+ }
+
+.ol-attribution {
+    display: none;
+}
+
+.navbar-inverse {
+    background-color: rgba(0,0,0,.5);
+}
+
+.navbar-brand {
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    padding: 10px;
+    color: #cccccc;
+      -o-transition:.5s;
+      -ms-transition:.5s;
+      -moz-transition:.5s;
+      -webkit-transition:.5s;
+    height: auto;
+      transition:.5s;
+}
+
+.navbar-brand:hover {
+    color: #2dd1ac !important;
+}
+
+.navbar-brand:hover:after {
+    opacity: 1;
+}
+
+.navbar-brand:after {
+    content: " α";
+    vertical-align: super;
+    font-size: smaller;
+    opacity: 0;
+    color: #2dd1ac;
+      -o-transition:.5s;
+      -ms-transition:.5s;
+      -moz-transition:.5s;
+      -webkit-transition:.5s;
+      /* ...and now for the proper property */
+      transition:.5s;
+}
+
+.map {
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ffffff;
+}
+
+.dropdown-menu {
+    background-color: #222222;
+    box-shadow: 5px 5px 30px #111111;
+    min-width: 180px;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: #111111;
+}
+
+.about {
+    padding-top: 15px;
+    font-size: 16px;
+}
+
+.about-dropdown {
+    min-width:350px; 
+    color:#fff;
+    padding: 10px 15px;
+}
+
+.about-text {
+    font-size: 16px;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;    
+}
+a:hover {
+    text-decoration: none;
+    color: #fff;   
+}
+a:visited {
+    text-decoration: none;
+    color: #fff;   
+}
+a:active {
+    text-decoration: none;
+    color: #fff;      
+}
+a:focus {
+    text-decoration: none;
+    color: #fff;         
+}
+.city-button {
+    cursor: pointer;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 300;
+    padding-left: 15px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.city-button:hover {
+    text-decoration: none;
+    color: grey;
+}
+
+.current-city {
+    font-size: 1.2em;
+    font-weight: 300;
+}
+
+.top_container {
+    margin-top: 20px;
+    margin-bottom: -10px;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 50px;
+  line-height: 500px;
+  text-align: center;
+  /*background-color: #fff;*/
+  margin: 0;
+  margin-top: -3px;
+}
+
+.rating_item {
+    margin: 10px;
+    margin-bottom: 15px; 
+}
+
+.center_text {
+    text-align: center;
+}
+
+.container_padding {
+    padding-top: 45px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.panel {
+    color: white;
+    background-color: #222222;
+    box-shadow: 5px 5px 30px #111111;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-top: 5px;
+}
+
+.panel h3 {
+    font-family: sans-serif;
+    font-weight: 300;
+    margin-bottom: 25px;
+}
+
+.panel li {
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+.features {
+    font-size: 14px;
+}
+
+.invisible {
+    visibility: hidden;
+    margin-bottom: 5px;
+}
+
+.btn {
+    background-color: #28b896;
+    border: 0 none;
+}
+
+.btn:hover {
+    background-color: #2ed1aa;
+}
+
+
+.btn:active:focus {
+    background-color: #28b896;
+}
+
+.btn:focus {
+    background-color: #28b896;
+}
+
+/*#343638;*/
+
+.modal {
+    border-radius: 2.5px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    top:5%;
+    outline: none;
+    border-color: #343638;
+}
+
+.modal-dialog {
+    border-radius: 2.5px;
+    background-color: #343638;
+    color: white;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border-color: #343638;
+}
+
+.modal-header {
+    background-color: #343638;
+    color: white;
+    border-color: #343638;
+}
+
+.modal-title {
+     text-align: center;
+     color: white;
+}
+
+.choose-files-text {
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.09;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+}
+
+.modal-content {
+    background-color: #343638;
+    color: white;
+    border-color: #343638;
+}
+
+.modal-footer {
+    background-color: #343638;
+    color: white;
+    text-align: center;
+    border-color: #343638;
+}
+
+.formats-text {
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    text-align: left;
+    color: grey;
+}
+
+.gps-text {
+    font-size: 13px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    color: grey!important;
+}
+
+td {
+    border-top: grey!important;
+}
+
+.listing input[type=checkbox] {
+  display: none !important;
+}
+
+.upload-btn {
+    padding-left: 15px!important;
+}
+
+.about-text {
+    font-size: 13px;
+}
+
+h3 {
+    margin-bottom: 5px !important;
+    margin-top: 10px !important;
+}
+
+p {
+    margin-bottom: 5px !important;
+}
+
+.fileupload-buttonbar {
+    margin-bottom: -20px !important;
+    padding-left: 15px;
+}

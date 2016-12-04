@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load jfutags %}
+{% block title %}Map Drive{% endblock %}
+
+{% block body %}
+<div class="container container_padding">
+    <div class="row">
+        <div class="col-md-3 panel">
+            <div class="text-center">
+                <button id="azaza" class="btn btn-default upload-btn btn-lg">Загрузить запись</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_body %}
+
+{% jfu 'upload.html' %}
+<script type="text/javascript">
+
+    $("#azaza").click(function() {
+        $("#upload_modal").modal("show");
+    });
+
+</script>
+{% endblock %}

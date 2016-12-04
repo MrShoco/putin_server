@@ -1,0 +1,287 @@
+<div id="upload_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form
+    id="fileupload" action="{{ upload_handler_url }}"
+    method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h3 class="modal-title center">Загрузить файл</h3>
+                  <div class="choose-files-text"> Выберите для загрузки файл с видеозаписью</div>
+                  <div class="formats-text">Загрузите видео с Путиным в форму и мы пришлем вам кадры, на которых он присутствует на e-mail. Поддерживаются форматы .MOV, .MP4, .AVI.</div>
+                </div>
+
+
+{% block UPLOAD_FORM %}
+
+    {% comment %}
+     Redirect browsers with JavaScript disabled to the origin page
+    {% endcomment %}
+    <noscript>
+        <input type="hidden" name="redirect" value="{{ request.path }}">
+    </noscript>
+
+    {% block UPLOAD_FORM_BUTTON_BAR %}
+    <div class="row fileupload-buttonbar">
+    {% comment %}
+     The fileupload-buttonbar contains buttons to add/delete files and
+     start/cancel the upload
+    {% endcomment %}
+        <!--<div class="col-md-1"></div>-->
+        <div class="col-md-4 upload-btn">
+
+            {% comment %}
+             The fileinput-button span is used to style the file input field as button
+            {% endcomment %}
+
+            {% block UPLOAD_FORM_BUTTON_BAR_ADD %}
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>Добавить файлы...</span>
+                {% block UPLOAD_FORM_BUTTON_BAR_ADD_FILE_INPUT %}
+                {% comment %}
+                    UPLOAD_FORM_BUTTON_BAR_ADD_FILE_INPUT and FILE_INPUT
+                    control the same block.
+
+                    FILE_INPUT is the original and shorter block name that has
+                    been kept to function as a convenient alias as well as to
+                    allow backward-compatibility with dependent projects.
+
+                    Note: Only one should be overriden in the inheriting templates.
+                {% endcomment %}
+                {% block FILE_INPUT %}
+                {% comment %}
+                    The file input for the upload form.
+                {% endcomment %}
+                <input
+                    type="file" name="files[]" multiple
+
+                    {% if accepted_mime_types %}
+                        accept = '{{ accepted_mime_types|join:"," }}'
+                    {% endif %}
+                >
+                {% endblock %}
+                {% endblock %}
+
+            </span>
+
+
+            {% endblock %}
+
+
+            <!--{% block UPLOAD_FORM_BUTTON_BAR_CONTROL %}
+            <button type="submit" class="btn btn-primary start">
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Начать загрузку</span>
+            </button>
+            {% endblock %}-->
+
+            {% block UPLOAD_FORM_BUTTON_BAR_EXTRA %}
+            {% endblock %}
+
+        </div>
+
+        {% block UPLOAD_FORM_PROGRESS_BAR %}
+        {% comment %}
+         The global progress information
+        {% endcomment %}
+        <div class="col-md-8 fileupload-progress fade">
+            {% comment %}
+             The global progress bar
+            {% endcomment %}
+            <div
+                class="progress progress-striped active"
+                role="progressbar"
+                aria-valuemin="0" aria-valuemax="100"
+            >
+                <div class="progress-bar progress-bar-success" style="width:0%;">
+                </div>
+            </div>
+            {% comment %}
+             The extended global progress information
+            {% endcomment %}
+            <div class="progress-extended">&nbsp;</div>
+        </div>
+        {% endblock %}
+
+    </div>
+    {% endblock %}
+
+    {% comment %}
+     The loading indicator is shown during file processing
+    {% endcomment %}
+
+    {% block UPLOAD_FORM_LINDICATOR %}
+    <div class="fileupload-loading"></div>
+    <br>
+    {% endblock %}
+
+    {% block UPLOAD_FORM_LISTING %}
+    {% comment %}
+     The table listing the files available for upload/download
+    {% endcomment %}
+    <table role="presentation" class="table">
+        <tbody class="files"></tbody>
+    </table>
+    {% endblock %}
+
+    {% block UPLOAD_FORM_EXTRA %}
+
+    {% endblock %}
+        </form>
+        {% endblock %}
+    <form action="{% url 'send' %}" method="POST">
+        {% csrf_token %}
+        <h4 style="text-align:center">Напишите ваш e-mail и мы пришлем туда результат работы</h4>
+        <div class="row" style="padding: 15px;">
+            <div class="col-xs-12">
+                <input class="form-control" type="email" name="email" placeholder="Email">
+                <input id="file_ids_input" name="file-ids" style="display:none;">
+            </div>
+        </div>
+        <div class="modal-footer center">
+            <input type="submit" id="send_data" class="btn btn-primary btn-lg" value="Отправить" />
+            <script type="text/javascript">
+                $("#send_data").click(function(event) {
+                    var file_id_divs = $(".file_id");
+                    var file_ids = new Array();
+                    for (var i = 0; i < file_id_divs.length; ++i) {
+                        file_ids[i] = file_id_divs[i].innerText;
+                    }
+                    console.log(file_ids.toString());
+                    $("#file_ids_input").val(file_ids.toString());
+                    return False;
+                });
+            </script>
+        </div>
+    </div>
+
+    </form>
+    </div>
+</div>
+
+{% block JS_TEMPLATES %}
+{% comment %}
+ The template to display files available for upload
+{% endcomment %}
+
+{% block JS_UPLOAD_TEMPLATE %}
+<script id="template-upload" type="text/x-tmpl">
+{{ JQ_OPEN }} for (var i=0, file; file=o.files[i]; i++) { {{ JQ_CLOSE }}
+
+    <tr class="template-upload fade">
+
+        {% block JS_UPLOAD_TEMPLATE_UPLOAD %}
+        <td>
+            <p class="name">{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        {% endblock %}
+
+        {% block JS_UPLOAD_TEMPLATE_PROGRESSBAR %}
+        <td>
+            <p class="size">Загружаем...</p>
+            <div class="progress progress-striped active" role="progressbar"
+                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+        </td>
+        {% endblock %}
+
+        {% block JS_UPLOAD_TEMPLATE_CONTROLS %}
+        <td>
+            {% block JS_UPLOAD_TEMPLATE_START %}
+            {{ JQ_OPEN }} if (!i && !o.options.autoUpload) { {{ JQ_CLOSE }}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Загрузить</span>
+                </button>
+            {{ JQ_OPEN }} } {{ JQ_CLOSE }}
+            {% endblock %}
+
+            {% block JS_UPLOAD_TEMPLATE_CANCEL %}
+            {{ JQ_OPEN }} if (!i) { {{ JQ_CLOSE }}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Отмена</span>
+                </button>
+            {{ JQ_OPEN }} } {{ JQ_CLOSE }}
+            {% endblock %}
+        </td>
+        {% endblock %}
+
+    </tr>
+{{ JQ_OPEN }} } {{ JQ_CLOSE }}
+</script>
+{% endblock %}
+
+
+{% block JS_DOWNLOAD_TEMPLATE %}
+{% comment %}
+ The template to display files available for download
+{% endcomment %}
+
+<script id="template-download" type="text/x-tmpl">
+{{ JQ_OPEN }} for (var i=0, file; file=o.files[i]; i++) { {{ JQ_CLOSE }}
+
+    <tr class="template-download fade">
+
+        {% block JS_DOWNLOAD_TEMPLATE_DOWNLOAD %}
+        <td>
+            <p class="name">
+                    <div class="file_id" style="display: none;">{{ JQ_OPEN }}=file.id{{ JQ_CLOSE }}</div>
+                    <span>{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}</span>
+            </p>
+
+            {% block JS_DOWNLOAD_TEMPLATE_ERROR %}
+                {{ JQ_OPEN }} if (file.error) { {{ JQ_CLOSE }}
+                    <div><span class="label label-danger">Error</span> {{ JQ_OPEN }}=file.error{{ JQ_CLOSE }}</div>
+                {{ JQ_OPEN }} } {{ JQ_CLOSE }}
+            {% endblock %}
+
+        </td>
+        {% endblock %}
+
+        {% block JS_DOWNLOAD_TEMPLATE_FSIZE %}
+        <td>
+            <span class="size">{{ JQ_OPEN }}=o.formatFileSize(file.size){{ JQ_CLOSE }}</span>
+        </td>
+        {% endblock %}
+
+        {% block JS_DOWNLOAD_TEMPLATE_DELETE %}
+        <td>
+            {{ JQ_OPEN }} if (file.deleteUrl) { {{ JQ_CLOSE }}
+                <button class="btn btn-danger delete"
+                        data-type="{{ JQ_OPEN }}=file.deleteType{{ JQ_CLOSE }}"
+                        data-data='{ "csrfmiddlewaretoken" : "{{ csrf_token }}" }'
+                        data-url="{{ JQ_OPEN }}=file.deleteUrl{{ JQ_CLOSE }}"
+                        {{ JQ_OPEN }} if (file.deleteWithCredentials) { %}
+                            data-xhr-fields='{"withCredentials":true}'{% }
+                        {{ JQ_CLOSE }}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Удалить</span>
+                </button>
+            {{ JQ_OPEN }} } else { {{ JQ_CLOSE }}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Отмена</span>
+                </button>
+            {{ JQ_OPEN }} } {{ JQ_CLOSE }}
+        </td>
+        {% endblock %}
+    </tr>
+{{ JQ_OPEN }} } {{ JQ_CLOSE }}
+</script>
+{% endblock %}
+{% endblock %}
+
+{% block extrabody %}
+<script>
+$(".brand-button").click(function(event) {
+    var brand = event.target.text;
+    console.log(brand)
+    $("#current-brand").text(brand);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+db.sqlite3
+track
+__pycache__
+*.py[cod]
+*.swp

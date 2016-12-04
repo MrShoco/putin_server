@@ -1,0 +1,101 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <script src="https://use.fontawesome.com/52654bb503.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/start/jquery-ui.css" crossorigin="anonymous">
+    <link href="{% static 'css/site.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://openlayers.org/en/v3.19.1/css/ol.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileupload.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileupload-ui.css">
+    <noscript>
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileupload-ui-noscript.css">
+    </noscript>
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js">
+    </script>
+    <![endif]-->
+
+
+</head>
+<body>
+
+
+    {% block body %}
+    {% endblock %}
+
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script src="{% static 'scripts/jquery.cookie.js' %}"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v3.19.1/build/ol.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="{{ STATIC_URL }}js/vendor/jquery.ui.widget.js"></script>
+
+    <script src="{{ STATIC_URL }}demo/tmpl.min.js"></script>
+    <script src="{{ STATIC_URL }}demo/load-image.min.js"></script>
+    <script src="{{ STATIC_URL }}demo/canvas-to-blob.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <script src="{{ STATIC_URL }}js/jquery.iframe-transport.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.fileupload.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.fileupload-process.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.fileupload-validate.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.fileupload-ui.js"></script>
+
+
+<!--[if gte IE 8]>
+<script src="{{ STATIC_URL }}js/cors/jquery.xdr-transport.js"></script>
+<![endif]-->
+
+
+{% block extra_body %}
+{% endblock %}
+
+<script type="text/javascript">
+    $( function() {
+        'use strict';
+
+        {% comment %}
+        Initialize the jQuery File Upload widget.
+
+        Default options are defined by the package,
+        however users may extend and define their
+        own options.
+        {% endcomment %}
+
+        {% block JS_INIT %}
+
+        {% comment %}
+        In order to support both CSRF tokens and extra form inputs,
+        the upload form (assumed to have an id of "fileupload") is serialized
+        to produce an array. This array is then updated with the csrf_token.
+
+        The contents of the array are then sent as form data to the upload
+        handling Django view.
+        {% endcomment %}
+
+        var formData = $('#fileupload').serializeArray();
+        formData.push(
+            { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}" }
+        );
+
+        $('#fileupload').fileupload({
+            formData: formData,
+            sequentialUploads: false,
+            limitConcurrentUploads: 3,
+            autoUpload: true,
+        });
+        {% endblock %}
+
+    });
+</script>
+
+</body>
+</html>
