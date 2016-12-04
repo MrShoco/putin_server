@@ -12,7 +12,12 @@ from time import sleep
 import json
 import os
 from django.http import JsonResponse
+from background_task import background
 
+
+@background(schedule=5)
+def process_video():
+    print("YEAH, async")
 
 def track_uploaded(request, email, file_ids):
     try:
@@ -30,6 +35,7 @@ def track_uploaded(request, email, file_ids):
     for id in file_ids:
         try:
             print("HANDLE ME")
+            process_video()
         except File.DoesNotExist:
             pass
 
