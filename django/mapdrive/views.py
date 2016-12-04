@@ -39,6 +39,12 @@ def track_uploaded(request, email, file_ids):
         except File.DoesNotExist:
             pass
 
+def process_result(request, id):
+  file = File.objects.get(pk=id)
+  artifacts = file.process_result_artifact.all()
+  context = {'file': file, 'artifacts': artifacts}
+  return render(request, 'process_result.html', context=context)
+
 
 @require_POST
 def upload( request ):
@@ -78,7 +84,7 @@ def send(request):
     email = request.POST["email"]
     files = list(map(int, request.POST["file-ids"].split(",")))
     track_uploaded(request, email, files)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/process_result/" + )
 
 
 def index(request):
