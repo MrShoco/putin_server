@@ -15,9 +15,9 @@
 There are no artifacts.
 {% else %}
   A lot of artifacts:<br>
-  {% for atr in artifacts %}
+  {% for art in artifacts %}
     Artifact. Seconds:  {{art.seconds}}<br>
-    <img src={{art.url}} width="250" height="250"><br>
+    <img src="{{art.url}}" width="250" height="250"><br>
   {% endfor %}
 {% endif %}
 {% endblock %}

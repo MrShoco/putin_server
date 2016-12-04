@@ -6,6 +6,7 @@ from IPython import display
 import pickle
 import index
 import numpy as np
+from ...models import *
 
 nnet = openface.TorchNeuralNet('/root/openface/models/openface/nn4.small2.v1.t7')
 align = openface.AlignDlib('/root/openface/models/dlib/shape_predictor_68_face_landmarks.dat')
@@ -14,6 +15,8 @@ NNET_INP_SHAPE = 96
 NNET_OUT_SHAPE = 128
 
 PATH = 'django/mapdrive/utils/putin_face_recognition/'
+IMAGE_PATH = ''
+IMAGE_URL = '/media/'
 
 class Video:
     def __init__(self, path):
@@ -81,7 +84,7 @@ def mark_image_with_rectangles(image, rectangles):
         cv2.rectangle(image, pt1, pt2, (0, 255, 0), 2)
     return image
 
-def process_frame(image):
+def process_frame(file, image, seconds):
     bbs = align.getAllFaceBoundingBoxes(image)
     if len(bbs) == 0:
         print "NOT FOUND ANY FACES ON THE FRAME IMAGE! FUCK"
@@ -96,6 +99,12 @@ def process_frame(image):
         alignedFace = align.align(NNET_INP_SHAPE, image, bb, landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
         vector = nnet.forward(alignedFace)
         neighb_ids, dists = vector_index.get_nns_by_vector(vector, 3, search_k=10)
+        
+        if dists[0] < 0.7:
+            image_name = file.file.name + str(seconds) + ".png"
+            plt.imsave(image_name, image)
+            artifact = ProcessResultArtifact.objects.create(url=IMAGE_URL + image_name, seconds=seconds, file=file)
+
         print "NEAREST NEIGHBORS IN ANNOY INDEX:"
         for n_id, dist in zip(neighb_ids, dists):
             print "ID:\t{0};\tFNAME:\t{1};\tDIST:\t{2:.3f}".format(n_id, putin_faces_fnames[n_id], dist)
@@ -124,8 +133,9 @@ def extract_frames(path, seconds, verbose=100):
         success, image = video.delayed_read(seconds)
 
 def find_putin(file):
-    for image in extract_frames(file.file.name, 10):
-        process_frame(image)
+    seconds = 1
+    for (i, image) in enumerate(extract_frames(file.file.name, seconds)):
+        process_frame(file, image, i * seconds)
 
 vector_index = index.RecommenderVectorIndex(NNET_OUT_SHAPE)
 vector_index.load(PATH + 'index_putin_faces.dump')
