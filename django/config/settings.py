@@ -70,9 +70,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'HOST': 'db',
-        'USER': 'postgres'
+        'USER': 'postgres',
     }
 }
+
+AUTOCOMMIT = True
 
 
 # Password validation

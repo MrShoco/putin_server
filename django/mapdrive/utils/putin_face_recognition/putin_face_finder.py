@@ -7,9 +7,14 @@ import pickle
 import index
 import numpy as np
 from ...models import *
+from django.db import transaction
+import psycopg2
 
 nnet = openface.TorchNeuralNet('/root/openface/models/openface/nn4.small2.v1.t7')
 align = openface.AlignDlib('/root/openface/models/dlib/shape_predictor_68_face_landmarks.dat')
+
+conn = psycopg2.connect("host=db dbname=postgres user=postgres")
+cur = conn.cursor()
 
 NNET_INP_SHAPE = 96
 NNET_OUT_SHAPE = 128
@@ -94,8 +99,6 @@ def process_frame(file, image, seconds):
     for bb in bbs:
         print "PROCESS THIS FACE:"
         marked_image = mark_image_with_rectangles(image, [bb])
-        plt.imshow(marked_image)
-        plt.show()
         alignedFace = align.align(NNET_INP_SHAPE, image, bb, landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
         vector = nnet.forward(alignedFace)
         neighb_ids, dists = vector_index.get_nns_by_vector(vector, 3, search_k=10)
@@ -103,8 +106,13 @@ def process_frame(file, image, seconds):
         if dists[0] < 0.7:
             image_name = file.file.name + str(seconds) + ".png"
             plt.imsave(image_name, image)
-            artifact = ProcessResultArtifact(url=IMAGE_URL + image_name, seconds=seconds, file=file)
-            artifact.save(force_insert=True)
+            query = "INSERT into mapdrive_processresultartifact (url, file_id, seconds) VALUES('{}', '{}', '{}')".format(IMAGE_URL + image_name, file.id, seconds)
+
+            print(query)
+            cur.execute(query)
+            conn.commit()
+
+
             print(ProcessResultArtifact.objects.count())
 
         print "NEAREST NEIGHBORS IN ANNOY INDEX:"
