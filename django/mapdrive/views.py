@@ -40,6 +40,8 @@ def track_uploaded(request, email, file):
 def process_result(request, id):
   file = File.objects.get(pk=id)
   artifacts = ProcessResultArtifact.objects.filter(file=file)
+  print(ProcessResultArtifact.objects.count())
+
   context = {'file': file, 'artifacts': artifacts, 'len_artifacts': len(artifacts)}
   return render(request, 'process_result.html', context=context)
 
