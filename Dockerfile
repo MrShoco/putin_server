@@ -2,6 +2,8 @@ FROM bamos/openface
 
 WORKDIR /app
 
+RUN apt update && apt install -y libpq-dev python-dev
+
 COPY requirements.txt /app
 
 RUN pip install -r requirements.txt
